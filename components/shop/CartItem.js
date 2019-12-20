@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Platform } from "react-native
 import { Ionicons } from "@expo/vector-icons"
 
 const CardItem = props => {
-    const { amount, title, quantity, onRemove } = props
+    const { amount, deletable, title, quantity, onRemove } = props
     return (
         <View style={styles.cartItem}>
             <View style={styles.itemData}>
@@ -12,9 +12,9 @@ const CardItem = props => {
             </View>
             <View style={styles.itemData}>
                 <Text style={styles.mainText}>${amount}  </Text>
-                <TouchableOpacity onPress={onRemove} style={styles.delete}>
+                {deletable && <TouchableOpacity onPress={onRemove} style={styles.delete}>
                     <Ionicons name={Platform.OS === "android" ? 'md-trash' : 'ios-trash'} size={23} color="red" />
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </View>
         </View>
 

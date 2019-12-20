@@ -1,21 +1,33 @@
 import React from "react"
-import { View, Text, Button, StyleSheet, Image } from "react-native"
+import { View, Text, Button, StyleSheet, Image, TouchableOpacity, Platform } from "react-native"
 import Colors from "../../constants/Colors"
+import { TouchableNativeFeedback } from "react-native-gesture-handler"
 
 const ProductItem = props => {
     const { title, price, imageUrl, onViewDetail, onAddToCart } = props
+
+    let TouchableComponent = TouchableOpacity
+    if (Platform.OS === 'android' && Platform.OS >= 21) {
+        TouchableComponent = TouchableNativeFeedback
+    }
     return (
         <View style={styles.product}>
-            <Image source={{ uri: imageUrl }} style={styles.image} />
-            <View style={styles.details}>
-                <Text style={styles.title}>{title}</Text>
-                <Text style={styles.price}>${price.toFixed(2)}</Text>
+            <View style={styles.touchable}>
+                <TouchableComponent onPress={props.onViewDetail} useForeground>
+
+                    <Image source={{ uri: imageUrl }} style={styles.image} />
+                    <View style={styles.details}>
+                        <Text style={styles.title}>{title}</Text>
+                        <Text style={styles.price}>${price.toFixed(2)}</Text>
+                    </View>
+                    <View style={styles.actions}>
+                        <Button color={Colors.primary} title="View Details" onPress={onViewDetail} />
+                        <Button color={Colors.primary} title="Add To Cart" onPress={onAddToCart} />
+                    </View>
+
+                </TouchableComponent>
             </View>
-            <View style={styles.actions}>
-                <Button color={Colors.primary} title="View Details" onPress={onViewDetail} />
-                <Button color={Colors.primary} title="Add To Cart" onPress={onAddToCart} />
-            </View>
-        </View>
+        </View >
     )
 }
 
@@ -33,6 +45,11 @@ const styles = StyleSheet.create({
         height: 300,
         margin: 20,
 
+
+    },
+    touchable: {
+        overflow: 'hidden',
+        borderRadius: 10
     },
     image: {
         width: '100%',

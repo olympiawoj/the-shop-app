@@ -17,7 +17,12 @@ const ProductOverviewScreen = props => {
                     return (
                         // <Text>{itemData.item.title}</Text>
                         <ProductItem
-                            onViewDetail={() => { }}
+                            onViewDetail={() => {
+                                props.navigation.navigate('ProductDetail', {
+                                    productId: itemData.item.id,
+                                    productTitle: itemData.item.title
+                                })
+                            }}
                             onAddToCard={() => { }
                             }
                             title={itemData.item.title}

@@ -11,7 +11,7 @@ const CardItem = props => {
                 <Text style={styles.mainText}>{title}</Text>
             </View>
             <View style={styles.itemData}>
-                <Text style={styles.mainText}>${amount.toFixed(2)}  </Text>
+                <Text style={styles.mainText}>${amount}  </Text>
                 <TouchableOpacity onPress={onRemove} style={styles.delete}>
                     <Ionicons name={Platform.OS === "android" ? 'md-trash' : 'ios-trash'} size={23} color="red" />
                 </TouchableOpacity>

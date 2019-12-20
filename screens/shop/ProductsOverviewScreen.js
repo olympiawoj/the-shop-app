@@ -45,10 +45,26 @@ const ProductOverviewScreen = props => {
 ProductOverviewScreen.navigationOptions = navData => {
     return {
         headerTitle: "All Products",
-        headerRight: <HeaderButtons HeaderButtonComponent={HeaderButton}><Item title="Cart" iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-            onPress={() => {
-                navData.navigation.navigate('Cart')
-            }} /></HeaderButtons>
+        headerLeft:
+            <HeaderButtons
+                HeaderButtonComponent={HeaderButton}>
+                <Item
+                    title="Menu"
+                    iconName={Platform.OS === "android" ? 'md-menu' : 'ios-menu'}
+                    onPress={() => {
+                        navData.navigation.toggleDrawer()
+                    }} />
+            </HeaderButtons>,
+        headerRight:
+            <HeaderButtons
+                HeaderButtonComponent={HeaderButton}>
+                <Item
+                    title="Cart" i
+                    conName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+                    onPress={() => {
+                        navData.navigation.navigate('Cart')
+                    }} />
+            </HeaderButtons>
     }
 }
 

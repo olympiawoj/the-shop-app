@@ -1,6 +1,6 @@
 # The Shop App
 
-❓A Shop app built with React Native
+🛍A Shop app built with React Native
 
 
 ## Table of Contents

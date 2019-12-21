@@ -1,10 +1,11 @@
 import React from "react"
-import { FlatList, Platform } from "react-native"
+import { FlatList, Platform, Button } from "react-native"
 import { useSelector } from "react-redux"
 import ProductItem from "../../components/shop/ProductItem"
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../../components/UI/HeaderButton';
+import Colors from "../../constants/Colors"
 
 
 //Output products as a FlatList using ProductItem
@@ -24,8 +25,19 @@ const UserProductsScreen = props => {
                         title={itemData.item.title}
                         imageUrl={itemData.item.imageUrl}
                         price={itemData.item.price}
-                        onViewDetail={() => { }}
-                        onAddToCart={() => { }} />
+                        onSelect={() => { }}>
+                        <Button
+                            color={Colors.primary}
+                            title="Edit"
+
+                        />
+                        <Button
+                            color={Colors.primary}
+                            title="Delete"
+
+                        />
+
+                    </ProductItem>
                 )
 
             }} />

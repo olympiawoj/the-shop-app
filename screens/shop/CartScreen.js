@@ -26,6 +26,7 @@ const CartScreen = props => {
 
     })
     const dispatch = useDispatch()
+    console.log('transformed cart items', cartItems)
 
     return (
         < View style={styles.screen}>

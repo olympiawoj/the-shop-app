@@ -5,7 +5,7 @@ import { TouchableNativeFeedback } from "react-native-gesture-handler"
 
 const ProductItem = props => {
     const { title, price, imageUrl, onSelect, onAddToCart } = props
-    console.log('imageUrl in product item', imageUrl)
+    // console.log('imageUrl in product item', imageUrl)
 
     let TouchableComponent = TouchableOpacity
     if (Platform.OS === 'android' && Platform.OS >= 21) {

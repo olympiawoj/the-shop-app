@@ -16,6 +16,8 @@ const EditProductScreen = props => {
     const [description, setDescription] = useState(editedProduct ? editedProduct.description : "")
 
     const dispatch = useDispatch()
+
+
     const submitHandler = useCallback(() => {
         // console.log("submitting")
         console.log(price)
@@ -25,6 +27,7 @@ const EditProductScreen = props => {
         } else {
             dispatch(productsActions.createProduct(title, description, imageUrl, +price))
         }
+        props.navigation.goBack()
     }, [dispatch, prodId, title, description, imageUrl, price])
 
     useEffect(() => {

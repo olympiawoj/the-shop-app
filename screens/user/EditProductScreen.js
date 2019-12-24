@@ -39,17 +39,31 @@ const EditProductScreen = props => {
             <View style={styles.form}>
                 <View style={styles.formControl}>
                     <Text style={styles.label} >Title</Text>
-                    <TextInput style={styles.input} value={title} onChangeText={(text) => setTitle(text)} />
+                    <TextInput
+                        autoCapitalize="sentences"
+                        autoCorrect
+                        keyboardType="default"
+                        style={styles.input}
+                        value={title}
+                        onChangeText={(text) => setTitle(text)}
+                        returnKeyType="next"
+                        onEndEditing={() => console.log('onEndEditing')}
+                        onSubmitEditing={() => console.log('onSubmitEditing')}
+                    />
                 </View>
 
                 <View style={styles.formControl}>
                     <Text style={styles.label} >Image URL</Text>
-                    <TextInput style={styles.input} value={imageUrl} onChangeText={(imageUrl) => setImageUrl(imageUrl)} />
+                    <TextInput
+
+                        style={styles.input}
+                        value={imageUrl}
+                        onChangeText={(imageUrl) => setImageUrl(imageUrl)} />
                 </View>
 
                 {editedProduct ? null : <View style={styles.formControl}>
                     <Text style={styles.label} >Price</Text>
-                    <TextInput style={styles.input} value={price} onChangeText={(price) => setPrice(price)} />
+                    <TextInput keyboardType="decimal-pad" style={styles.input} value={price} onChangeText={(price) => setPrice(price)} />
                 </View>}
                 <View style={styles.formControl}>
                     <Text style={styles.label}>Description</Text>

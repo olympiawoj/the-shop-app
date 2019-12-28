@@ -4,6 +4,7 @@ import * as productsActions from "../../store/actions/products"
 import { View, Text, TextInput, ScrollView, StyleSheet, Platform, Alert } from "react-native"
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
+import Input from "../../components/UI/Input"
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE"
 
@@ -105,39 +106,44 @@ const EditProductScreen = props => {
     return (
         <ScrollView>
             <View style={styles.form}>
-                <View style={styles.formControl}>
-                    <Text style={styles.label} >Title</Text>
-                    <TextInput
-                        autoCapitalize="sentences"
-                        autoCorrect
-                        keyboardType="default"
+                <Input
+                    label="Title"
+                    errorText="Please enter a valid title!"
+                    autoCapitalize="sentences"
+                    autoCorrect
+                    keyboardType="default"
+                    returnKeyType="next"
+                    style={styles.input}
+                    value={formState.inputValues.title}
+                />
+
+                <Input
+                    label="Image url"
+                    errorText="Please enter a valid image url!"
+                    keyboardType="default"
+                    returnKeyType="next"
+                    style={styles.input}
+                    value={formState.inputValues.imageUrl}
+                />
+
+                {editedProduct ? null :
+                    <Input
+                        label="Price"
+                        errorText="Please enter a price!"
+                        keyboardType="decimal-pad"
                         style={styles.input}
-                        value={formState.inputValues.title}
-                        onChangeText={textChangeHandler.bind(this, 'title')}
-                        returnKeyType="next"
-                        onEndEditing={() => console.log('onEndEditing')}
-                        onSubmitEditing={() => console.log('onSubmitEditing')}
+                        value={formState.inputValues.price}
                     />
-                    {!formState.inputValidities.title && <Text>Please enter a valid title</Text>}
-                </View>
+                }
 
-                <View style={styles.formControl}>
-                    <Text style={styles.label} >Image URL</Text>
-                    <TextInput
-
-                        style={styles.input}
-                        value={formState.inputValues.imageUrl}
-                        onChangeText={textChangeHandler.bind(this, 'imageUrl')} />
-                </View>
-
-                {editedProduct ? null : <View style={styles.formControl}>
-                    <Text style={styles.label} >Price</Text>
-                    <TextInput keyboardType="decimal-pad" style={styles.input} value={formState.inputValues.price} onChangeText={textChangeHandler.bind(this, "price")} />
-                </View>}
-                <View style={styles.formControl}>
-                    <Text style={styles.label}>Description</Text>
-                    <TextInput style={styles.input} value={formState.inputValues.description} onChangeText={textChangeHandler.bind(this, "description")} />
-                </View>
+                <Input
+                    label="Description"
+                    errorText="Please enter a description!"
+                    style={styles.input}
+                    value={formState.inputValues.description}
+                    multiline
+                    numberOfLines={3}
+                />
             </View>
         </ScrollView>
     )
@@ -162,19 +168,7 @@ const styles = StyleSheet.create({
     form: {
         margin: 20
     },
-    formControl: {
-        width: '100%'
-    },
-    label: {
-        fontFamily: 'open-sans-bold',
-        marginVertical: 8
-    },
-    input: {
-        paddingHorizontal: 2,
-        paddingVertical: 5,
-        borderBottomColor: "#ccc",
-        borderBottomWidth: 1
-    }
+
 
 })
 

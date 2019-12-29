@@ -73,9 +73,16 @@ const EditProductScreen = props => {
 
         if (editedProduct) {
             // console.log('title', title)
-            dispatch(productsActions.updateProduct(prodId, formState.inputValues.title, formState.inputValues.description, formState.inputValues.imageUrl))
+            dispatch(productsActions.updateProduct(
+                prodId,
+                formState.inputValues.title,
+                formState.inputValues.description,
+                formState.inputValues.imageUrl))
         } else {
-            dispatch(productsActions.createProduct(formState.inputValues.title, formState.inputValues.description, formState.inputValues.imageUrl, +formState.inputValues.price))
+            dispatch(productsActions.createProduct
+                (formState.inputValues.title,
+                    formState.inputValues.description, formState.inputValues.imageUrl,
+                    +formState.inputValues.price))
         }
         props.navigation.goBack()
     }, [dispatch, prodId, formState])
@@ -85,9 +92,9 @@ const EditProductScreen = props => {
         props.navigation.setParams({ 'submit': submitHandler })
     }, [submitHandler])
 
-    const textChangeHandler = (inputIdentifier, text) => {
+    const inputChangeHandler = useCallback((inputIdentifier, inputValue, inputValidity) => {
         let isValid = false
-        if (text.trim().length > 0) {
+        if (inputValue.trim().length > 0) {
             isValid = true
 
         }
@@ -96,17 +103,18 @@ const EditProductScreen = props => {
         dispatchFormState(
             {
                 type: FORM_INPUT_UPDATE,
-                value: text,
-                isValid: isValid,
+                value: inputValue,
+                isValid: inputValidity,
                 input: inputIdentifier
             })
 
-    }
+    }, [dispatchFormState])
 
     return (
         <ScrollView>
             <View style={styles.form}>
                 <Input
+                    id="title"
                     label="Title"
                     errorText="Please enter a valid title!"
                     autoCapitalize="sentences"
@@ -115,34 +123,55 @@ const EditProductScreen = props => {
                     returnKeyType="next"
                     style={styles.input}
                     value={formState.inputValues.title}
+                    onInputChange={inputChangeHandler}
+                    initialValue={editedProduct ? editedProduct.title : ''}
+                    initiallyValid={!!editedProduct}
+                    //validation
+                    required
                 />
 
                 <Input
+                    id="imageUrl"
                     label="Image url"
                     errorText="Please enter a valid image url!"
                     keyboardType="default"
                     returnKeyType="next"
                     style={styles.input}
                     value={formState.inputValues.imageUrl}
+                    onInputChange={inputChangeHandler}
+                    initialValue={editedProduct ? editedProduct.imageUrl : ''}
+                    initiallyValid={!!editedProduct}
+                    required
                 />
 
                 {editedProduct ? null :
                     <Input
+                        id="price"
                         label="Price"
                         errorText="Please enter a price!"
                         keyboardType="decimal-pad"
                         style={styles.input}
                         value={formState.inputValues.price}
+                        onInputChange={inputChangeHandler}
+                        required
+                        min={0.1}
                     />
                 }
 
                 <Input
+                    id="description"
                     label="Description"
                     errorText="Please enter a description!"
                     style={styles.input}
                     value={formState.inputValues.description}
                     multiline
+                    //only used by Android
                     numberOfLines={3}
+                    onInputChange={inputChangeHandler}
+                    initialValue={editedProduct ? editedProduct.description : ''}
+                    initiallyValid={!!editedProduct}
+                    required
+                    minLength={5}
                 />
             </View>
         </ScrollView>

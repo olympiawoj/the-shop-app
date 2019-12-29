@@ -1,25 +1,43 @@
-import React, { useReducer } from "react"
+import React, { useReducer, useEffect } from "react"
 
 import { View, Text, TextInput, StyleSheet } from "react-native"
 
 const INPUT_CHANGE = 'INPUT_CHANGE'
+const INPUT_BLUR = 'INPUT_BLUR'
 
 const inputReducer = (state, action) => {
     switch (action.type) {
         case INPUT_CHANGE:
+            return {
+                ...state,
+                value: action.value,
+                isValid: action.isValid,
+                touched: false
+            }
+        case INPUT_BLUR:
+            return {
+                ...state,
+                touched: true
+            }
         default:
             return state
     }
 
 }
 const Input = props => {
-    const { label, errorText, initialValue, initiallyValid } = props
+    const { label, errorText, initialValue, initiallyValid, onInputChange, id } = props
 
     const [inputState, dispatch] = useReducer(inputReducer, {
-        value: initialVaue ? initialValue : '',
+        value: initialValue ? initialValue : '',
         isValid: initiallyValid ? initiallyValid : '',
         touched: false
     })
+
+    useEffect(() => {
+        if (inputState.touched) {
+            onInputChange(id, inputState.value, inputState.isValid)
+        }
+    }, [id, onInputChange, inputState])
 
     const textChangeHandler = text => {
 
@@ -45,19 +63,24 @@ const Input = props => {
         dispatch({ type: INPUT_CHANGE, value: text, isValid: isValid })
     }
 
+    const lostFocusHandler = () => {
+        dispatch({ type: INPUT_BLUR })
+    }
+
     return (
         <View style={styles.formControl}>
             <Text style={styles.label} >{label}</Text>
             <TextInput
                 {...props}
                 style={styles.input}
-                value={formState.inputValues.title}
-                onChangeText={textChangeHandler.bind(this, 'title')}
+                value={inputState.value}
+                onBlur={lostFocusHandler}
+                onChangeText={textChangeHandler}
 
             // onEndEditing={() => console.log('onEndEditing')}
             // onSubmitEditing={() => console.log('onSubmitEditing')}
             />
-            {!formState.inputValidities.title && <Text>{errorText}</Text>}
+            {!inputState.isValid && <Text>{errorText}</Text>}
         </View>
     )
 }

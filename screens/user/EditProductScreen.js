@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useReducer } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import * as productsActions from "../../store/actions/products"
-import { View, Text, TextInput, ScrollView, StyleSheet, Platform, Alert } from "react-native"
+import { View, ScrollView, StyleSheet, Platform, Alert, KeyboardAvoidingView } from "react-native"
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
 import Input from "../../components/UI/Input"
@@ -111,70 +111,72 @@ const EditProductScreen = props => {
     }, [dispatchFormState])
 
     return (
-        <ScrollView>
-            <View style={styles.form}>
-                <Input
-                    id="title"
-                    label="Title"
-                    errorText="Please enter a valid title!"
-                    autoCapitalize="sentences"
-                    autoCorrect
-                    keyboardType="default"
-                    returnKeyType="next"
-                    style={styles.input}
-                    value={formState.inputValues.title}
-                    onInputChange={inputChangeHandler}
-                    initialValue={editedProduct ? editedProduct.title : ''}
-                    initiallyValid={!!editedProduct}
-                    //validation
-                    required
-                />
-
-                <Input
-                    id="imageUrl"
-                    label="Image url"
-                    errorText="Please enter a valid image url!"
-                    keyboardType="default"
-                    returnKeyType="next"
-                    style={styles.input}
-                    value={formState.inputValues.imageUrl}
-                    onInputChange={inputChangeHandler}
-                    initialValue={editedProduct ? editedProduct.imageUrl : ''}
-                    initiallyValid={!!editedProduct}
-                    required
-                />
-
-                {editedProduct ? null :
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={100}>
+            <ScrollView>
+                <View style={styles.form}>
                     <Input
-                        id="price"
-                        label="Price"
-                        errorText="Please enter a price!"
-                        keyboardType="decimal-pad"
+                        id="title"
+                        label="Title"
+                        errorText="Please enter a valid title!"
+                        autoCapitalize="sentences"
+                        autoCorrect
+                        keyboardType="default"
+                        returnKeyType="next"
                         style={styles.input}
-                        value={formState.inputValues.price}
+                        value={formState.inputValues.title}
                         onInputChange={inputChangeHandler}
+                        initialValue={editedProduct ? editedProduct.title : ''}
+                        initiallyValid={!!editedProduct}
+                        //validation
                         required
-                        min={0.1}
                     />
-                }
 
-                <Input
-                    id="description"
-                    label="Description"
-                    errorText="Please enter a description!"
-                    style={styles.input}
-                    value={formState.inputValues.description}
-                    multiline
-                    //only used by Android
-                    numberOfLines={3}
-                    onInputChange={inputChangeHandler}
-                    initialValue={editedProduct ? editedProduct.description : ''}
-                    initiallyValid={!!editedProduct}
-                    required
-                    minLength={5}
-                />
-            </View>
-        </ScrollView>
+                    <Input
+                        id="imageUrl"
+                        label="Image url"
+                        errorText="Please enter a valid image url!"
+                        keyboardType="default"
+                        returnKeyType="next"
+                        style={styles.input}
+                        value={formState.inputValues.imageUrl}
+                        onInputChange={inputChangeHandler}
+                        initialValue={editedProduct ? editedProduct.imageUrl : ''}
+                        initiallyValid={!!editedProduct}
+                        required
+                    />
+
+                    {editedProduct ? null :
+                        <Input
+                            id="price"
+                            label="Price"
+                            errorText="Please enter a price!"
+                            keyboardType="decimal-pad"
+                            style={styles.input}
+                            value={formState.inputValues.price}
+                            onInputChange={inputChangeHandler}
+                            required
+                            min={0.1}
+                        />
+                    }
+
+                    <Input
+                        id="description"
+                        label="Description"
+                        errorText="Please enter a description!"
+                        style={styles.input}
+                        value={formState.inputValues.description}
+                        multiline
+                        //only used by Android
+                        numberOfLines={3}
+                        onInputChange={inputChangeHandler}
+                        initialValue={editedProduct ? editedProduct.description : ''}
+                        initiallyValid={!!editedProduct}
+                        required
+                        minLength={5}
+                    />
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     )
 }
 

@@ -80,7 +80,9 @@ const Input = props => {
             // onEndEditing={() => console.log('onEndEditing')}
             // onSubmitEditing={() => console.log('onSubmitEditing')}
             />
-            {!inputState.isValid && <Text>{errorText}</Text>}
+            <View style={styles.errorContainer}>
+                {!inputState.isValid && inputState.touched && <Text style={styles.errorText}>{errorText}</Text>}
+            </View>
         </View>
     )
 }
@@ -97,6 +99,14 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderBottomColor: "#ccc",
         borderBottomWidth: 1
+    },
+    errorContainer: {
+        marginVertical: 5
+    },
+    errorText: {
+        fontFamily: "open-sans",
+        color: 'red',
+        fontSize: 14
     }
 })
 export default Input

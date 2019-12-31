@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 //Redux imports
-import { createStore, combineReducers } from "redux"
+import { createStore, combineReducers, applyMiddleware } from "redux"
 import { Provider } from "react-redux"
+import ReduxThunk from "redux-thunk"
+
 import { composeWithDevTools } from "redux-devtools-extension"
 import productsReducer from "./store/reducers/products"
 import cartReducer from "./store/reducers/cart"
@@ -21,7 +23,7 @@ const rootReducer = combineReducers({
 })
 
 //remove composeWithDevTools before deploying app 
-const store = createStore(rootReducer, composeWithDevTools())
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
 
 const fetchFonts = () => {
   return Font.loadAsync({

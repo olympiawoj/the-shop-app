@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback, useReducer } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import * as productsActions from "../../store/actions/products"
-import { View, ScrollView, StyleSheet, Platform, Alert, KeyboardAvoidingView } from "react-native"
+import { View, ScrollView, StyleSheet, Platform, Alert, KeyboardAvoidingView, ActivityIndicator } from "react-native"
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/HeaderButton';
 import Input from "../../components/UI/Input"
+import Colors from "../../constants/Colors";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE"
 
@@ -35,6 +36,10 @@ const formReducer = (state, action) => {
 }
 
 const EditProductScreen = props => {
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState()
+
+
     const prodId = props.navigation.getParam('productId')
     const editedProduct = useSelector(state => state.products.userProducts.find(prod => prod.id === prodId))
     // console.log('edited product', editedProduct)
@@ -64,27 +69,44 @@ const EditProductScreen = props => {
         formIsValid: editedProduct ? true : false
     })
 
+    //reruns whenever error changes
+    useEffect(() => {
+        if (error) {
+            Alert.alert("An error occured!", error, [{ text: 'Okay' }])
+        }
+    }, [error])
 
-    const submitHandler = useCallback(() => {
+
+    const submitHandler = useCallback(async () => {
         if (!formState.formIsValid) {
             Alert.alert('Wrong Input', 'Please check the errors in the form', [{ text: 'Okay' }])
-            return
+            return;
         }
 
-        if (editedProduct) {
-            // console.log('title', title)
-            dispatch(productsActions.updateProduct(
-                prodId,
-                formState.inputValues.title,
-                formState.inputValues.description,
-                formState.inputValues.imageUrl))
-        } else {
-            dispatch(productsActions.createProduct
-                (formState.inputValues.title,
+        setError(null)
+        setIsLoading(true)
+        try {
+            if (editedProduct) {
+                // console.log('title', title
+                await dispatch(productsActions.updateProduct(
+                    prodId,
+                    formState.inputValues.title,
+                    formState.inputValues.description,
+                    formState.inputValues.imageUrl))
+            } else {
+                await dispatch(productsActions.createProduct(formState.inputValues.title,
                     formState.inputValues.description, formState.inputValues.imageUrl,
-                    +formState.inputValues.price))
+                    +formState.inputValues.price
+                )
+                )
+            }
+            props.navigation.goBack()
+        } catch (error) {
+            setError(error.message)
         }
-        props.navigation.goBack()
+
+        setIsLoading(false)
+
     }, [dispatch, prodId, formState])
 
 
@@ -93,13 +115,12 @@ const EditProductScreen = props => {
     }, [submitHandler])
 
     const inputChangeHandler = useCallback((inputIdentifier, inputValue, inputValidity) => {
-        let isValid = false
-        if (inputValue.trim().length > 0) {
-            isValid = true
+        // let isValid = false
+        // if (inputValue.trim().length > 0) {
+        //     isValid = true
+        // }
 
-        }
-
-        console.log('is valid', isValid)
+        // console.log('is valid', isValid)
         dispatchFormState(
             {
                 type: FORM_INPUT_UPDATE,
@@ -108,7 +129,14 @@ const EditProductScreen = props => {
                 input: inputIdentifier
             })
 
+        console.log(
+            'input value', inputValue)
+
     }, [dispatchFormState])
+
+    if (isLoading) {
+        return <View style={styles.centered}><ActivityIndicator size="large" color={Colors.primary} /></View>
+    }
 
     return (
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={100}>
@@ -199,6 +227,11 @@ const styles = StyleSheet.create({
     form: {
         margin: 20
     },
+    centered: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 
 
 })

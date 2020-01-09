@@ -1,5 +1,5 @@
-import React from "react"
-import { View, Text, StyleSheet, FlatList, Button } from "react-native"
+import React, { useState } from "react"
+import { View, Text, StyleSheet, FlatList, Button, ActivityIndicator } from "react-native"
 import { useSelector, useDispatch } from "react-redux"
 import Colors from "../../constants/Colors"
 import CartItem from "../../components/shop/CartItem"
@@ -9,6 +9,10 @@ import Card from "../../components/UI/Card"
 
 
 const CartScreen = props => {
+
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState(null)
+
     const cartTotalAmount = useSelector(state => state.cart.totalAmount)
     //cartItems is an object, not an array, but an array would be better, therefore use long form to return an array
     const cartItems = useSelector(state => {
@@ -29,15 +33,28 @@ const CartScreen = props => {
     const dispatch = useDispatch()
     console.log('transformed cart items', cartItems)
 
+
+    const sendOrderHandler = async () => {
+        setIsLoading(true)
+        //returns a promise, await invisibly wraps into a then block
+        await dispatch(orderActions.addOrder(cartItems, cartTotalAmount))
+        setIsLoading(false)
+    }
+
+
+
     return (
         < View style={styles.screen}>
             <Card style={styles.summary}>
                 <Text style={styles.summaryText}>
                     Total: <Text style={styles.amount}>${Math.round(cartTotalAmount.toFixed(2) * 100) / 100}</Text>
                 </Text>
-                <Button color={Colors.accent} title="ORDER NOW" onPress={() => {
-                    dispatch(orderActions.addOrder(cartItems, cartTotalAmount))
-                }} disabled={cartItems.length === 0} />
+                {isLoading ? <ActivityIndicator size="small" color={Colors.primary} /> : <Button
+                    color={Colors.accent}
+                    title="ORDER NOW"
+                    onPress={sendOrderHandler}
+                    disabled={cartItems.length === 0} />}
+
             </Card>
             {/* List of Cart Items */}
             <View>

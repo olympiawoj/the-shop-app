@@ -33,13 +33,15 @@ const Input = props => {
     })
 
     useEffect(() => {
-        if (inputState.touched) {
-            onInputChange(id, inputState.value, inputState.isValid)
-        }
+
+        // remove the "if (inputState.touched)" check, so that as you change the value of an input, the current value and validity is always pushed up to the parent.  The returned JSX still has a dependency on inputState.touched to show the validation message, so that still works.
+        // if (inputState.touched) {
+        onInputChange(id, inputState.value, inputState.isValid)
+        // }
     }, [id, onInputChange, inputState])
 
     const textChangeHandler = text => {
-
+        console.log('textchangehandler is dispatched', text)
         const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
         let isValid = true;
@@ -63,6 +65,7 @@ const Input = props => {
     }
 
     const lostFocusHandler = () => {
+        console.log('input blur is dispatched')
         dispatch({ type: INPUT_BLUR })
     }
 

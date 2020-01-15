@@ -8,6 +8,7 @@ import { composeWithDevTools } from "redux-devtools-extension"
 import productsReducer from "./store/reducers/products"
 import cartReducer from "./store/reducers/cart"
 import ordersReducer from "./store/reducers/orders"
+import authReducer from "./store/reducers/auth"
 
 //Navigation Imports
 import ShopNavigator from "./navigation/ShopNavigation"
@@ -19,7 +20,8 @@ import * as Font from "expo-font"
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
-  orders: ordersReducer
+  orders: ordersReducer,
+  auth: authReducer
 })
 
 //remove composeWithDevTools before deploying app 

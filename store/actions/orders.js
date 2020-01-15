@@ -36,11 +36,11 @@ export const fetchOrders = () => {
 }
 
 export const addOrder = (cartItems, totalAmount) => {
-    return async dispatch => {
-
+    return async (dispatch, getState) => {
+        const token = getState().auth.token
         const date = new Date().toISOString()
         //any async code you want!
-        const response = await fetch('https://reactnative-shop-app.firebaseio.com/orders/u1.json', {
+        const response = await fetch(`https://reactnative-shop-app.firebaseio.com/orders/u1.json?${token}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

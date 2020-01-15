@@ -33,7 +33,9 @@ export const signup = (email, password) => {
 
         //dispatch action object with type and data]
         dispatch({
-            type: SIGNUP
+            type: SIGNUP,
+            token: resData.idToken,
+            userId: resData.localId
         })
     }
 }
@@ -71,7 +73,9 @@ export const login = (email, password) => {
 
         //dispatch action object with type and data]
         dispatch({
-            type: LOGIN
+            type: LOGIN,
+            token: resData.idToken,
+            userId: resData.localId
         })
     }
 }

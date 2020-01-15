@@ -2,7 +2,6 @@ export const SIGNUP = "SIGNUP"
 export const LOGIN = "LOGIN"
 
 
-
 //to create a new user, we need an email and password
 export const signup = (email, password) => {
     //send HTTP request using redux thunk to return a function async dispatch which can use async/await which gets dispatch function as an arg passed in by redux thunk middleware, allows us to run async code before we then dispatch an action that creates our store
@@ -19,7 +18,14 @@ export const signup = (email, password) => {
         })
 
         if (!response.ok) {
-            throw new Error("Something went wrong when signing up")
+            console.log('response not ok')
+            const errorResData = await response.json()
+            const errorId = errorResData.error.message
+            let message = 'Something went wrong!'
+            if (errorId === 'EMAIL_EXISTS') {
+                message = 'This email already exists already'
+            }
+            throw new Error(message)
         }
         //if response is okay, get resData by awaiting for response.jsON which will unpack and convert from JSON to JS
         const resData = await response.json()
@@ -49,7 +55,15 @@ export const login = (email, password) => {
         })
 
         if (!response.ok) {
-            throw new Error("Something went wrong when signing up")
+            const errorResData = await response.json()
+            const errorId = errorResData.error.message
+            let message = 'Something went wrong!'
+            if (errorId === 'EMAIL_NOT_FOUND') {
+                message = 'This email could not be found'
+            } else if (errorId === "INVALID_PASSWORD") {
+                message = 'This password is not valid'
+            }
+            throw new Error(message)
         }
         //if response is okay, get resData by awaiting for response.jsON which will unpack and convert from JSON to JS
         const resData = await response.json()

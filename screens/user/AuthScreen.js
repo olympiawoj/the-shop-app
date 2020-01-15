@@ -1,5 +1,5 @@
-import React, { useState, useReducer, useCallback } from "react"
-import { ScrollView, View, KeyboardAvoidingView, StyleSheet, Button } from "react-native"
+import React, { useState, useReducer, useCallback, useEffect } from "react"
+import { ScrollView, View, KeyboardAvoidingView, StyleSheet, Button, ActivityIndicator, Alert } from "react-native"
 import { useDispatch } from "react-redux"
 import { LinearGradient } from "expo-linear-gradient"
 import Input from "../../components/UI/Input"
@@ -37,6 +37,9 @@ const formReducer = (state, action) => {
 
 
 const AuthScreen = props => {
+
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState()
     //if false, we're in login mode, we use this to determine what text we output and what action we take 
     const [isSignup, setIsSignUp] = useState(false)
 
@@ -56,7 +59,15 @@ const AuthScreen = props => {
         formIsValid: false
     })
 
-    const authHandler = () => {
+
+    useEffect(() => {
+        if (error) {
+            console.log("an error occurred")
+            Alert.alert('An Error Occurred', error, [{ text: "Okay" }])
+        }
+    }, [error])
+
+    const authHandler = async () => {
         if (!formState.formIsValid) {
             //determines the value the function returns -  a return keyword without an expression after it will cause the function to return undefined - 
             return
@@ -64,7 +75,6 @@ const AuthScreen = props => {
 
         let action;
         if (isSignup) {
-
             action = authActions.signup(
                 formState.inputValues.email,
                 formState.inputValues.password
@@ -76,9 +86,16 @@ const AuthScreen = props => {
                 formState.inputValues.email,
                 formState.inputValues.password
             )
-            dispatch(action)
 
         }
+        setError(null)
+        setIsLoading(true)
+        try {
+            await dispatch(action)
+        } catch (error) {
+            setError(error.message)
+        }
+        setIsLoading(false)
 
     }
 
@@ -132,10 +149,14 @@ const AuthScreen = props => {
                             onInputChange={inputChangeHandler} />
                     </ScrollView>
                     <View style={styles.buttonContainer}>
-                        <Button
-                            title={isSignup ? 'Sign Up' : 'Login'}
-                            color={Colors.primary}
-                            onPress={authHandler} />
+                        {isLoading ?
+                            <ActivityIndicator
+                                size="small"
+                                color={Colors.primary} />
+                            : <Button
+                                title={isSignup ? 'Sign Up' : 'Login'}
+                                color={Colors.primary}
+                                onPress={authHandler} />}
                     </View>
                     <View style={styles.buttonContainer}>
                         <Button

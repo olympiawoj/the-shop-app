@@ -97,8 +97,6 @@ const AuthScreen = props => {
             setError(error.message)
             setIsLoading(false)
         }
-
-
     }
 
     const inputChangeHandler =

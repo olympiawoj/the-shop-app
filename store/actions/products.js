@@ -6,7 +6,8 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT'
 export const SET_PRODUCTS = 'SET_PRODUCTS'
 
 export const fetchProducts = () => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
+        const userId = getState().auth.userId
         //any async code
 
         try {
@@ -27,7 +28,11 @@ export const fetchProducts = () => {
                     resData[key].price))
             }
             console.log(resData)
-            dispatch({ type: SET_PRODUCTS, products: loadedProducts })
+            dispatch({
+                type: SET_PRODUCTS,
+                products: loadedProducts,
+                userProducts: loadedProducts.filter(prod => prod.ownerId === userId)
+            })
         }
         catch (error) {
             //handle error - send to custom analytics server etc
@@ -60,6 +65,7 @@ export const deleteProduct = productId => {
 export const createProduct = (title, description, imageUrl, price) => {
     return async (dispatch, getState) => {
         const token = getState().auth.token
+        const userId = getState().auth.userId
         //any async code you want!
         const response = await fetch(`https://reactnative-shop-app.firebaseio.com/products.json?auth=${token}`, {
             method: 'POST',
@@ -70,7 +76,8 @@ export const createProduct = (title, description, imageUrl, price) => {
                 title,
                 description,
                 imageUrl,
-                price
+                price,
+                ownerId: userId
             })
         })
 
@@ -84,7 +91,8 @@ export const createProduct = (title, description, imageUrl, price) => {
                 title: title,
                 description: description,
                 imageUrl: imageUrl,
-                price: price
+                price: price,
+                ownerId: userId
             }
         })
     }

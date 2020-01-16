@@ -29,6 +29,20 @@ const OrdersScreen = props => {
     if (isLoading) {
         return <View style={styles.centered}><ActivityIndicator size={23} color={Colors.primary} /></View>
     }
+
+
+    if (orders.length === 0) {
+        return (
+            <View style=
+                {{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                <Text>No orders found, maybe start ordering some products?</Text>
+            </View>
+        )
+    }
     return (
         <View>
             <FlatList

@@ -31,13 +31,17 @@ const CartScreen = props => {
 
     })
     const dispatch = useDispatch()
-    console.log('transformed cart items', cartItems)
+    // console.log('transformed cart items', cartItems)
 
 
     const sendOrderHandler = async () => {
         setIsLoading(true)
         //returns a promise, await invisibly wraps into a then block
-        await dispatch(orderActions.addOrder(cartItems, cartTotalAmount))
+        try {
+            await dispatch(orderActions.addOrder(cartItems, cartTotalAmount))
+        } catch (error) {
+            throw new Error(error)
+        }
         setIsLoading(false)
     }
 

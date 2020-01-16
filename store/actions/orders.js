@@ -56,6 +56,7 @@ export const addOrder = (cartItems, totalAmount) => {
                 date: date.toISOString()
             })
         })
+        // console.log('this is the response', response)
 
         if (!response.ok) {
             throw new Error("Something went wrong adding an order")
